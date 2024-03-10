@@ -1,6 +1,6 @@
-all: testlib
+all: polygon
 
-testlib: testlib.o primlib.o
+polygon: polygon.o primlib.o
 	gcc -g $^ -o $@  -lSDL2_gfx `sdl2-config --libs` -lm
 
 .c.o: 
@@ -8,7 +8,7 @@ testlib: testlib.o primlib.o
 
 primlib.o: primlib.c primlib.h
 
-testlib.o: testlib.c primlib.h
+polygon.o: polygon.c primlib.h
 
 clean:
-	-rm primlib.o testlib.o testlib
+	-rm primlib.o polygon.o polygon
