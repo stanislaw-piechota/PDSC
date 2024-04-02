@@ -18,8 +18,8 @@
 #define DELAY_TIME 10	 // in milliseconds
 #define FALLING_TIME 0.4 // in seconds
 // formula taken from observation of graph of the function
-#define ITERS_TO_MOVE(POINTS) (int)(35 - pow(15 * pow((double)POINTS / 1000, 1.5), 1.0 / 3))
-#define POINTS_PER_ROW 200
+#define ITERS_TO_MOVE(POINTS) (int)(35 - pow(15 * pow((double)POINTS / 1000, 1.5), 1.0 / 2.5))
+#define POINTS_PER_ROW 300
 #define UPDATE_TRESHOLD 1000
 #define UPDATE_DELTA 3
 #define PIXELS_PER_LETTER 4
