@@ -9,7 +9,7 @@
 #define SCREEN_HEIGHT gfx_screenHeight()
 #define POLES_NO 3
 #define DISCS_NO 3
-#define EMPTY (-1)
+#define EMPTY -1
 #define POLE_COLOR YELLOW
 #define DISC_COLOR BLUE
 #define FLOOR_COLOR RED
@@ -20,7 +20,7 @@
 #define DISC_LENGTH_PER_UNIT \
 	((SCREEN_WIDTH / (POLES_NO + 1) - POLE_WIDTH) / DISCS_NO)
 #define POLE_CENTER_X(index) (SCREEN_WIDTH / (POLES_NO + 1) * (index))
-#define ANIMATION_Y_POS SCREEN_HEIGHT - FLOOR_HEIGHT - POLE_HEIGHT - DISC_HEIGHT
+#define ANIMATION_Y_POS (SCREEN_HEIGHT - FLOOR_HEIGHT - POLE_HEIGHT - DISC_HEIGHT)
 #define WIN_TEXT "Congratulations! You won"
 #define LOSE_TEXT "You lose! Try again"
 #define PIXELS_PER_LETTER 4
@@ -56,8 +56,10 @@ Disc pop(Pole *stack)
 	return stack->discs[stack->top--];
 }
 
-void init_lib(){
-	if (gfx_init()) exit(3);
+void init_lib()
+{
+	if (gfx_init())
+		exit(3);
 }
 
 Disc *topDisc(int poleIndex);
@@ -84,8 +86,7 @@ bool checkWin();
 
 Pole poles[POLES_NO];
 short flags = 0;
-void (*animationFunction)(Disc*, int*, int*) = animateUp;
-
+void (*animationFunction)(Disc *, int *, int *) = animateUp;
 
 int main(int argc, char *argv[])
 {
@@ -142,7 +143,8 @@ void processInput(int *scope, int keyVal)
 		*scope = keyVal - 1;
 }
 
-void switchScopes(int **current, int *src, int *dest, Disc **animatedDisc){
+void switchScopes(int **current, int *src, int *dest, Disc **animatedDisc)
+{
 	flags ^= CONFIRM_CHOICE;
 	if ((*current == src) && (*src != EMPTY))
 		*current = dest;
@@ -232,7 +234,7 @@ void drawObjects(int src, int dest)
 void drawScreen(int src, int dest)
 {
 	gfx_filledRect(0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1, BLACK);
-	gfx_filledRect(0, SCREEN_HEIGHT - FLOOR_HEIGHT, SCREEN_WIDTH - 1,
+	gfx_filledRect(0, SCREEN_HEIGHT - FLOOR_HEIGHT + 1, SCREEN_WIDTH - 1,
 				   SCREEN_HEIGHT - 1, FLOOR_COLOR);
 	drawObjects(src, dest);
 	gfx_updateScreen();
@@ -242,7 +244,8 @@ void drawScreen(int src, int dest)
 void drawEnding()
 {
 	char *endText = flags & WIN ? WIN_TEXT : LOSE_TEXT;
-	while (gfx_pollkey() == EMPTY){
+	while (gfx_pollkey() == EMPTY)
+	{
 		gfx_filledRect(0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1, BLACK);
 		gfx_textout(SCREEN_WIDTH / 2 - PIXELS_PER_LETTER * strlen(endText), SCREEN_HEIGHT / 2, endText, WHITE);
 		gfx_updateScreen();
@@ -250,35 +253,40 @@ void drawEnding()
 	}
 }
 
-void animateUp(Disc *disc, int *src, int *dest){
+void animateUp(Disc *disc, int *src, int *dest)
+{
 	disc->top--;
 	disc->bottom--;
 	if (disc->bottom <= ANIMATION_Y_POS)
 		animationFunction = animateLeftRight;
 }
 
-void animateDown(Disc *disc, int *src, int *dest){
+void animateDown(Disc *disc, int *src, int *dest)
+{
 	disc->top++;
 	disc->bottom++;
 
-	Disc* destDisc = topDisc(*dest);
+	Disc *destDisc = topDisc(*dest);
 	if (disc->bottom >= (destDisc == NULL ? SCREEN_HEIGHT - FLOOR_HEIGHT : destDisc->top))
 		animationFunction = endMove;
 }
 
-void animateLeftRight(Disc *disc, int *src, int *dest){
+void animateLeftRight(Disc *disc, int *src, int *dest)
+{
 	int direction = signum(*dest - *src);
 	disc->right += direction;
 	disc->left += direction;
-	if ((disc->left+disc->right)/2 == POLE_CENTER_X(*dest + 1))
+	if ((disc->left + disc->right) / 2 == POLE_CENTER_X(*dest + 1))
 		animationFunction = animateDown;
 }
 
-void endMove(Disc *disc, int *src, int *dest){
+void endMove(Disc *disc, int *src, int *dest)
+{
 	push(&poles[*dest], pop(&poles[*src]));
 	resetScopes(src, dest);
 	animationFunction = animateUp;
-	if (checkWin()){
+	if (checkWin())
+	{
 		flags |= END_PROGRAM;
 		flags |= WIN;
 	}
