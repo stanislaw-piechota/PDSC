@@ -71,8 +71,9 @@ void drawTexts(int src, int dest);
 void drawObjects(int src, int dest);
 void drawEnding();
 void drawScreen(int src, int dest);
-void processInput(int *scope, int keyVal);
+void switchScopes(int **current, int *src, int *dest, Disc **animatedDisc);
 void mapInput(int *scope);
+void processInput(int *scope, int keyVal);
 void animateLeftRight(Disc *disc, int *src, int *dest);
 void animateUp(Disc *disc, int *src, int *dest);
 void animateDown(Disc *disc, int *src, int *dest);
@@ -85,22 +86,6 @@ Pole poles[POLES_NO];
 short flags = 0;
 void (*animationFunction)(Disc*, int*, int*) = animateUp;
 
-void switchScopes(int **current, int *src, int *dest, Disc **animatedDisc){
-	flags ^= CONFIRM_CHOICE;
-	if ((*current == src) && (*src != EMPTY))
-		*current = dest;
-	else if ((*current == dest) && (*dest != EMPTY))
-	{
-		*current = src;
-		if (isMoveLegal(*src, *dest))
-		{
-			flags |= ANIMATION_RUNNING;
-			*animatedDisc = topDisc(*src);
-		}
-		else
-			resetScopes(src, dest);
-	}
-}
 
 int main(int argc, char *argv[])
 {
@@ -120,7 +105,6 @@ int main(int argc, char *argv[])
 			switchScopes(&currentScope, &src, &dest, &animatedDisc);
 		else if (flags & ANIMATION_RUNNING)
 			animationFunction(animatedDisc, &src, &dest);
-
 		if (flags & END_PROGRAM)
 			break;
 	}
@@ -156,6 +140,23 @@ void processInput(int *scope, int keyVal)
 		*scope = 9;
 	else if (keyVal)
 		*scope = keyVal - 1;
+}
+
+void switchScopes(int **current, int *src, int *dest, Disc **animatedDisc){
+	flags ^= CONFIRM_CHOICE;
+	if ((*current == src) && (*src != EMPTY))
+		*current = dest;
+	else if ((*current == dest) && (*dest != EMPTY))
+	{
+		*current = src;
+		if (isMoveLegal(*src, *dest))
+		{
+			flags |= ANIMATION_RUNNING;
+			*animatedDisc = topDisc(*src);
+		}
+		else
+			resetScopes(src, dest);
+	}
 }
 
 Disc *topDisc(int poleIndex)
@@ -241,10 +242,12 @@ void drawScreen(int src, int dest)
 void drawEnding()
 {
 	char *endText = flags & WIN ? WIN_TEXT : LOSE_TEXT;
-	gfx_filledRect(0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1, BLACK);
-	gfx_textout(SCREEN_WIDTH / 2 - PIXELS_PER_LETTER * strlen(endText), SCREEN_HEIGHT / 2, endText, WHITE);
-	gfx_updateScreen();
-	while (gfx_pollkey() == EMPTY);
+	while (gfx_pollkey() == EMPTY){
+		gfx_filledRect(0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1, BLACK);
+		gfx_textout(SCREEN_WIDTH / 2 - PIXELS_PER_LETTER * strlen(endText), SCREEN_HEIGHT / 2, endText, WHITE);
+		gfx_updateScreen();
+		SDL_Delay(10);
+	}
 }
 
 void animateUp(Disc *disc, int *src, int *dest){
