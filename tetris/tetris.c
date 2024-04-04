@@ -402,9 +402,10 @@ void moveX(short deltaX, Piece *piece)
 	}
 }
 
-bool tryToPlacePiece(Piece* piece, Piece* holdPiece, int left, int top){
+bool tryToPlacePiece(Piece *piece, Piece *holdPiece, int left, int top)
+{
 	Piece switchedPiece = createPiece(left, top, holdPiece->kind, holdPiece->rotation,
-										holdPiece->colorIndex);
+									  holdPiece->colorIndex);
 	if (checkPieceCollision(switchedPiece))
 		return false;
 	*piece = *holdPiece;
@@ -416,7 +417,8 @@ bool tryToPlacePiece(Piece* piece, Piece* holdPiece, int left, int top){
 	return true;
 }
 
-void switchCurrent(Piece copy, Piece* holdPiece, int left, int top){
+void switchCurrent(Piece copy, Piece *holdPiece, int left, int top)
+{
 	*holdPiece = copy;
 	for (int i = 0; i < PIECE_SIZE; i++)
 	{
@@ -435,7 +437,8 @@ void switchHold(Piece *piece, Piece *holdPiece, Piece *nextPieces)
 		updatePieces(piece, nextPieces);
 		switchCurrent(currentCopy, holdPiece, left, top);
 	}
-	else if (tryToPlacePiece(piece, holdPiece, left, top)){
+	else if (tryToPlacePiece(piece, holdPiece, left, top))
+	{
 		switchCurrent(currentCopy, holdPiece, left, top);
 	}
 }
@@ -483,7 +486,8 @@ void drawIntroduction()
 	}
 }
 
-void resetGame(){
+void resetGame()
+{
 	for (int i = 0; i < BOARD_HEIGHT; i++)
 	{
 		for (int j = 0; j < BOARD_WIDTH; j++)
@@ -492,7 +496,8 @@ void resetGame(){
 	points = 0;
 }
 
-void gameLoop(Piece* currentPiece, Piece* holdPiece, Piece* nextPieces){
+void gameLoop(Piece *currentPiece, Piece *holdPiece, Piece *nextPieces)
+{
 	short iterCounter = 0;
 	while (!(flags & END_PROGRAM))
 	{
