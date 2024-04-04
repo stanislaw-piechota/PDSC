@@ -15,10 +15,9 @@
 #define HEIGHT_OFFSET 1
 #define SQAURE_SIZE ((float)SCREEN_HEIGHT / (BOARD_HEIGHT + 2 * HEIGHT_OFFSET))
 #define BOARD_START_X ((SCREEN_WIDTH - BOARD_WIDTH * SQAURE_SIZE) / 2)
-#define DELAY_TIME 10	 // in milliseconds
-#define FALLING_TIME 0.4 // in seconds
-// formula taken from observation of graph of the function
-#define ITERS_TO_MOVE(POINTS) (int)(35 - pow(15 * pow((double)POINTS / 1000, 1.5), 1.0 / 2.5))
+#define DELAY_TIME 10
+#define FALLING_TIME 0.4
+#define ITERS_TO_MOVE(POINTS) (int)(10 * (33.1 / pow((double)POINTS / 10000 + 5.2, 1) - 1.4))
 #define POINTS_PER_ROW 300
 #define UPDATE_TRESHOLD 1000
 #define UPDATE_DELTA 3
@@ -47,7 +46,7 @@ typedef struct
 	// as there are only 4 "active squares" in each piece
 	int fields[4][2];
 	int rotation;
-	int piece;
+	int kind;
 	int colorIndex;
 } Piece;
 
@@ -118,6 +117,26 @@ void drawCurrentPiece(Piece piece)
 	}
 }
 
+void drawLines()
+{
+	// intersecting lines
+	for (int i = 0; i < BOARD_HEIGHT; i++)
+	{
+		gfx_line(BOARD_START_X, (HEIGHT_OFFSET + i) * SQAURE_SIZE,
+				 BOARD_START_X + BOARD_WIDTH * SQAURE_SIZE - 1, (HEIGHT_OFFSET + i) * SQAURE_SIZE, WHITE);
+	}
+	for (int j = 0; j < BOARD_WIDTH; j++)
+	{
+		gfx_line(BOARD_START_X + j * SQAURE_SIZE, HEIGHT_OFFSET * SQAURE_SIZE,
+				 BOARD_START_X + j * SQAURE_SIZE, (HEIGHT_OFFSET + BOARD_HEIGHT) * SQAURE_SIZE - 1, WHITE);
+	}
+
+	// white bounds
+	gfx_rect(BOARD_START_X, HEIGHT_OFFSET * SQAURE_SIZE,
+			 BOARD_START_X + BOARD_WIDTH * SQAURE_SIZE,
+			 SCREEN_HEIGHT - HEIGHT_OFFSET * SQAURE_SIZE, WHITE);
+}
+
 void drawBoard()
 {
 	for (int i = 0; i < BOARD_HEIGHT; i++)
@@ -128,23 +147,14 @@ void drawBoard()
 				drawSquare(j, i, DUMPED_COLOR);
 		}
 	}
+}
 
-	// intersecting lines
-	for (int i = 0; i < BOARD_HEIGHT; i++)
-	{
-		gfx_line(BOARD_START_X, (HEIGHT_OFFSET + i) * SQAURE_SIZE,
-				 BOARD_START_X + BOARD_WIDTH * SQAURE_SIZE, (HEIGHT_OFFSET + i) * SQAURE_SIZE, WHITE);
-	}
-	for (int j = 0; j < BOARD_WIDTH; j++)
-	{
-		gfx_line(BOARD_START_X + j * SQAURE_SIZE, HEIGHT_OFFSET * SQAURE_SIZE,
-				 BOARD_START_X + j * SQAURE_SIZE, (HEIGHT_OFFSET + BOARD_HEIGHT) * SQAURE_SIZE, WHITE);
-	}
-
-	// white bounds
-	gfx_rect(BOARD_START_X, HEIGHT_OFFSET * SQAURE_SIZE,
-			 BOARD_START_X + BOARD_WIDTH * SQAURE_SIZE,
-			 SCREEN_HEIGHT - HEIGHT_OFFSET * SQAURE_SIZE, WHITE);
+void drawScore()
+{
+	// buff = "SCORE: XXXXXX"
+	char buff[7 + 6];
+	snprintf(buff, 7 + 6, "SCORE: %d", points);
+	gfx_textout(SCREEN_WIDTH / 2 - strlen(buff) * PIXELS_PER_LETTER, (HEIGHT_OFFSET * SQAURE_SIZE - PIXELS_PER_LETTER) / 2, buff, WHITE);
 }
 
 void drawScreen(Piece piece, Piece *holdPiece, Piece *nextPieces)
@@ -155,23 +165,20 @@ void drawScreen(Piece piece, Piece *holdPiece, Piece *nextPieces)
 	drawNextPieces(nextPieces);
 	drawHoldPiece(holdPiece);
 	drawBoard();
-
-	// buff = "SCORE: XXXXXX"
-	char buff[7 + 6];
-	snprintf(buff, 7 + 6, "SCORE: %d", points);
-	gfx_textout(SCREEN_WIDTH / 2 - strlen(buff) * PIXELS_PER_LETTER, (HEIGHT_OFFSET * SQAURE_SIZE - PIXELS_PER_LETTER) / 2, buff, WHITE);
+	drawLines();
+	drawScore();
 
 	gfx_updateScreen();
 	SDL_Delay(DELAY_TIME);
 }
 
-int drawEnding()
+void drawEnding()
 {
 	int key;
 	while ((key = gfx_pollkey()) != SDLK_RETURN)
 	{
 		if (key == SDLK_ESCAPE)
-			return END_PROGRAM;
+			exit(3);
 		gfx_filledRect(0, 0, gfx_screenWidth() - 1, gfx_screenHeight() - 1,
 					   BLACK);
 
@@ -183,27 +190,10 @@ int drawEnding()
 
 		gfx_updateScreen();
 	}
-	return CONTINUE_PROGRAM;
-}
-
-void printBoard()
-{
-	// function for debugging the state of board
-	for (int i = 0; i < BOARD_HEIGHT; i++)
-	{
-		for (int j = 0; j < BOARD_WIDTH; j++)
-		{
-			printf("%d ", board[i][j]);
-		}
-		printf("\n");
-	}
-	printf("------------\n\n");
 }
 
 bool checkPieceCollision(Piece piece)
 {
-	/* Used for checking collisions when rotating,
-	switching and when checking endgame*/
 	for (int i = 0; i < PIECE_SIZE; i++)
 	{
 		if ((piece.fields[i][0] < 0) || (piece.fields[i][0] >= BOARD_HEIGHT))
@@ -216,10 +206,16 @@ bool checkPieceCollision(Piece piece)
 	return false;
 }
 
-Piece createPiece(int x, int y, int pc, int rot, int color, bool editBoard)
+void blitPiece(Piece piece)
+{
+	for (int i = 0; i < PIECE_SIZE; i++)
+		board[piece.fields[i][0]][piece.fields[i][1]] = PIECE_ACTIVE;
+}
+
+Piece createPiece(int x, int y, int pc, int rot, int color)
 {
 	Piece piece;
-	piece.piece = pc;
+	piece.kind = pc;
 	piece.rotation = rot;
 	piece.colorIndex = color;
 	int squareCount = 0;
@@ -234,18 +230,13 @@ Piece createPiece(int x, int y, int pc, int rot, int color, bool editBoard)
 			}
 		}
 	}
-	if (editBoard)
-	{
-		for (int i = 0; i < PIECE_SIZE; i++)
-			board[piece.fields[i][0]][piece.fields[i][1]] = PIECE_ACTIVE;
-	}
 	return piece;
 }
 
 void rotatePiece(Piece *piece)
 {
 	int newRotation = (piece->rotation + 1) % ROTATIONS;
-	Piece rotatedPiece = createPiece(findLeft(*piece), findTop(*piece), piece->piece, newRotation, piece->colorIndex, false);
+	Piece rotatedPiece = createPiece(findLeft(*piece), findTop(*piece), piece->kind, newRotation, piece->colorIndex);
 	if (!checkPieceCollision(rotatedPiece))
 	{
 		*piece = rotatedPiece;
@@ -253,11 +244,11 @@ void rotatePiece(Piece *piece)
 	}
 }
 
-void randPiece(Piece *piece, bool editBoard)
+void randPiece(Piece *piece)
 {
 	int pcIndex = rand() % PIECES, rotIndex = rand() % ROTATIONS,
 		x = rand() % (BOARD_WIDTH - PIECE_SIZE + 1), color = rand() % (COLOR_MAX - GREEN) + GREEN;
-	*piece = createPiece(x, 0, pcIndex, rotIndex, color, editBoard);
+	*piece = createPiece(x, 0, pcIndex, rotIndex, color);
 }
 
 bool checkVerticalCollision(Piece *piece)
@@ -355,7 +346,19 @@ void updatePieces(Piece *piece, Piece *nextPieces)
 {
 	for (int i = 0; i < NEXT_PIECES - 1; i++)
 		nextPieces[i] = nextPieces[i + 1];
-	randPiece(nextPieces + NEXT_PIECES - 1, false);
+	randPiece(nextPieces + NEXT_PIECES - 1);
+}
+
+void finishMove(Piece *piece, Piece *holdPiece, Piece *nextPieces)
+{
+	*piece = nextPieces[0];
+	if (checkPieceCollision(*piece))
+	{
+		flags |= LOST_GAME;
+		return;
+	}
+	updatePieces(piece, nextPieces);
+	deleteCompleteRows(*piece, holdPiece, nextPieces);
 }
 
 void moveY(Piece *piece, Piece *holdPiece, Piece *nextPieces)
@@ -375,23 +378,14 @@ void moveY(Piece *piece, Piece *holdPiece, Piece *nextPieces)
 		}
 	}
 	if (toDump)
-	{
-		*piece = nextPieces[0];
-		if (checkPieceCollision(*piece))
-		{
-			flags |= LOST_GAME;
-			return;
-		}
-		updatePieces(piece, nextPieces);
-		deleteCompleteRows(*piece, holdPiece, nextPieces);
-	}
+		finishMove(piece, holdPiece, nextPieces);
 }
 
 void fastForward(Piece *piece, Piece *holdPiece, Piece *nextPieces)
 {
 	while (!checkVerticalCollision(piece))
 		moveY(piece, holdPiece, nextPieces);
-	points += smashPoints[piece->piece];
+	points += smashPoints[piece->kind];
 	moveY(piece, holdPiece, nextPieces);
 }
 
@@ -408,6 +402,29 @@ void moveX(short deltaX, Piece *piece)
 	}
 }
 
+bool tryToPlacePiece(Piece* piece, Piece* holdPiece, int left, int top){
+	Piece switchedPiece = createPiece(left, top, holdPiece->kind, holdPiece->rotation,
+										holdPiece->colorIndex);
+	if (checkPieceCollision(switchedPiece))
+		return false;
+	*piece = *holdPiece;
+	for (int i = 0; i < PIECE_SIZE; i++)
+	{
+		piece->fields[i][0] = top + holdPiece->fields[i][0];
+		piece->fields[i][1] = left + holdPiece->fields[i][1];
+	}
+	return true;
+}
+
+void switchCurrent(Piece copy, Piece* holdPiece, int left, int top){
+	*holdPiece = copy;
+	for (int i = 0; i < PIECE_SIZE; i++)
+	{
+		holdPiece->fields[i][0] -= top;
+		holdPiece->fields[i][1] -= left;
+	}
+}
+
 void switchHold(Piece *piece, Piece *holdPiece, Piece *nextPieces)
 {
 	Piece currentCopy = *piece;
@@ -416,26 +433,10 @@ void switchHold(Piece *piece, Piece *holdPiece, Piece *nextPieces)
 	{
 		*piece = nextPieces[0];
 		updatePieces(piece, nextPieces);
+		switchCurrent(currentCopy, holdPiece, left, top);
 	}
-	else
-	{
-		Piece switchedPiece = createPiece(left, top, holdPiece->piece, holdPiece->rotation,
-										  holdPiece->colorIndex, false);
-		if (checkPieceCollision(switchedPiece))
-			return;
-		*piece = *holdPiece;
-		for (int i = 0; i < PIECE_SIZE; i++)
-		{
-			piece->fields[i][0] = top + holdPiece->fields[i][0];
-			piece->fields[i][1] = left + holdPiece->fields[i][1];
-		}
-	}
-
-	*holdPiece = currentCopy;
-	for (int i = 0; i < PIECE_SIZE; i++)
-	{
-		holdPiece->fields[i][0] -= top;
-		holdPiece->fields[i][1] -= left;
+	else if (tryToPlacePiece(piece, holdPiece, left, top)){
+		switchCurrent(currentCopy, holdPiece, left, top);
 	}
 }
 
@@ -465,14 +466,14 @@ void handleKeyEvents(Piece *piece, Piece *holdPiece, Piece *nextPieces)
 	}
 }
 
-int drawIntroduction()
+void drawIntroduction()
 {
 	int key;
 	const char message[] = "PRESS ENTER TO START";
 	while ((key = gfx_pollkey()) != SDLK_RETURN)
 	{
 		if (key == SDLK_ESCAPE)
-			return END_PROGRAM;
+			exit(3);
 		gfx_filledRect(0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1, BLACK);
 
 		gfx_textout(SCREEN_WIDTH / 2 - strlen(message) * PIXELS_PER_LETTER, SCREEN_HEIGHT / 2 - PIXELS_PER_LETTER / 2,
@@ -480,46 +481,51 @@ int drawIntroduction()
 
 		gfx_updateScreen();
 	}
-	return CONTINUE_PROGRAM;
 }
 
-int drawGame()
-{
-	// reset game
+void resetGame(){
 	for (int i = 0; i < BOARD_HEIGHT; i++)
 	{
 		for (int j = 0; j < BOARD_WIDTH; j++)
 			board[i][j] = 0;
 	}
 	points = 0;
+}
 
+void gameLoop(Piece* currentPiece, Piece* holdPiece, Piece* nextPieces){
 	short iterCounter = 0;
-	Piece currentPiece;
-	Piece holdPiece = createPiece(0, 0, 0, 0, PIECE_EMPTY, false);
-	Piece nextPieces[NEXT_PIECES];
-	randPiece(&currentPiece, true);
-	for (int i = 0; i < NEXT_PIECES; i++)
-		randPiece(nextPieces + i, false);
-
 	while (!(flags & END_PROGRAM))
 	{
-		drawScreen(currentPiece, &holdPiece, nextPieces);
-		handleKeyEvents(&currentPiece, &holdPiece, nextPieces);
+		drawScreen(*currentPiece, holdPiece, nextPieces);
+		handleKeyEvents(currentPiece, holdPiece, nextPieces);
 
 		if (++iterCounter >= ITERS_TO_MOVE(points))
 		{
 			iterCounter = 0;
-			moveY(&currentPiece, &holdPiece, nextPieces);
+			moveY(currentPiece, holdPiece, nextPieces);
 		}
 
 		if (flags & END_PROGRAM)
-			return END_PROGRAM;
+			exit(3);
 		if (flags & LOST_GAME)
 			break;
 	}
+}
+
+void drawGame()
+{
+	resetGame();
+	Piece currentPiece;
+	Piece holdPiece = createPiece(0, 0, 0, 0, PIECE_EMPTY);
+	Piece nextPieces[NEXT_PIECES];
+	randPiece(&currentPiece);
+	blitPiece(currentPiece);
+	for (int i = 0; i < NEXT_PIECES; i++)
+		randPiece(nextPieces + i);
+
+	gameLoop(&currentPiece, &holdPiece, nextPieces);
 	drawScreen(currentPiece, &holdPiece, nextPieces);
 	SDL_Delay(1000);
-	return CONTINUE_PROGRAM;
 }
 
 int main(int argc, char *argv[])
@@ -532,14 +538,11 @@ int main(int argc, char *argv[])
 
 	while (true)
 	{
-		if (drawIntroduction() == END_PROGRAM)
-			break;
-		if (drawGame() == END_PROGRAM)
-			break;
+		drawIntroduction();
+		drawGame();
 		if (flags & LOST_GAME)
 		{
-			if (drawEnding() == END_PROGRAM)
-				break;
+			drawEnding();
 			flags ^= LOST_GAME;
 		}
 	}
