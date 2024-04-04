@@ -535,12 +535,13 @@ void drawGame()
 
 int main(int argc, char *argv[])
 {
-	srand(time(NULL));
 	if (gfx_init())
 	{
 		exit(3);
 	}
 
+	srand(time(NULL));
+	gfx_playMusic("theme_music.mp3", 0.33, true);
 	while (true)
 	{
 		drawIntroduction();

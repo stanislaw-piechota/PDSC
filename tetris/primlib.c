@@ -24,6 +24,20 @@ static struct RGB colors[COLOR_MAX] = {
 const int SCREEN_WIDTH = 1200;
 const int SCREEN_HEIGHT = 700;
 
+void gfx_playMusic(const char* filename, double volume, int infiniteLoop){
+	Mix_Music* music = Mix_LoadMUS(filename);
+	if (!music) {
+		printf("Music error: %s\n", Mix_GetError());
+		return;
+	}
+
+	if (volume < 0) volume = 0;
+	if (volume > 1) volume = 1;
+	Mix_VolumeMusic((int)(MIX_MAX_VOLUME * volume));
+	
+	Mix_PlayMusic(music, infiniteLoop?-1:0);
+}
+
 void gfx_pixel(int x, int y, enum color c)
 {
 	pixelRGBA(renderer, x, y, colors[c].r, colors[c].g, colors[c].b, 255);
@@ -151,11 +165,12 @@ int gfx_init()
 {
 
 	/* Initialize SDL */
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+	if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) && Mix_Init(MIX_INIT_MP3)) {
 		fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
 		return 1;
 	}
 	atexit(gfx_close);
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
 
 	window = SDL_CreateWindow("SDL", SDL_WINDOWPOS_UNDEFINED,
 							  SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
