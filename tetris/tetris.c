@@ -17,11 +17,12 @@
 #define BOARD_START_X ((SCREEN_WIDTH - BOARD_WIDTH * SQAURE_SIZE) / 2)
 #define DELAY_TIME 10
 #define FALLING_TIME 0.4
-#define ITERS_TO_MOVE(POINTS) (int)(10 * (33.1 / pow((double)POINTS / 10000 + 5.2, 1) - 1.4))
+#define ITERS_TO_MOVE(POINTS) ((int)(10 * (33.1 / pow((double)POINTS / 10000 + 5.2, 1) - 1.4)))
 #define POINTS_PER_ROW 300
 #define UPDATE_TRESHOLD 1000
 #define UPDATE_DELTA 3
 #define PIXELS_PER_LETTER 4
+#define SCORE_DIGITS 6
 
 #define PIECE_SIZE 4
 #define PIECES 7
@@ -117,9 +118,14 @@ void drawCurrentPiece(Piece piece)
 	}
 }
 
-void drawLines()
+void drawOuterBounds() {
+	gfx_rect(BOARD_START_X, HEIGHT_OFFSET * SQAURE_SIZE,
+			 BOARD_START_X + BOARD_WIDTH * SQAURE_SIZE,
+			 SCREEN_HEIGHT - HEIGHT_OFFSET * SQAURE_SIZE, WHITE);
+}
+
+void drawIntersectingLines()
 {
-	// intersecting lines
 	for (int i = 0; i < BOARD_HEIGHT; i++)
 	{
 		gfx_line(BOARD_START_X, (HEIGHT_OFFSET + i) * SQAURE_SIZE,
@@ -130,11 +136,6 @@ void drawLines()
 		gfx_line(BOARD_START_X + j * SQAURE_SIZE, HEIGHT_OFFSET * SQAURE_SIZE,
 				 BOARD_START_X + j * SQAURE_SIZE, (HEIGHT_OFFSET + BOARD_HEIGHT) * SQAURE_SIZE - 1, WHITE);
 	}
-
-	// white bounds
-	gfx_rect(BOARD_START_X, HEIGHT_OFFSET * SQAURE_SIZE,
-			 BOARD_START_X + BOARD_WIDTH * SQAURE_SIZE,
-			 SCREEN_HEIGHT - HEIGHT_OFFSET * SQAURE_SIZE, WHITE);
 }
 
 void drawBoard()
@@ -151,9 +152,8 @@ void drawBoard()
 
 void drawScore()
 {
-	// buff = "SCORE: XXXXXX"
-	char buff[7 + 6];
-	snprintf(buff, 7 + 6, "SCORE: %d", points);
+	char buff[7 + SCORE_DIGITS];
+	snprintf(buff, 7 + SCORE_DIGITS, "SCORE: %d", points);
 	gfx_textout(SCREEN_WIDTH / 2 - strlen(buff) * PIXELS_PER_LETTER, (HEIGHT_OFFSET * SQAURE_SIZE - PIXELS_PER_LETTER) / 2, buff, WHITE);
 }
 
@@ -165,7 +165,8 @@ void drawScreen(Piece piece, Piece *holdPiece, Piece *nextPieces)
 	drawNextPieces(nextPieces);
 	drawHoldPiece(holdPiece);
 	drawBoard();
-	drawLines();
+	drawIntersectingLines();
+	drawOuterBounds();
 	drawScore();
 
 	gfx_updateScreen();
@@ -182,9 +183,8 @@ void drawEnding()
 		gfx_filledRect(0, 0, gfx_screenWidth() - 1, gfx_screenHeight() - 1,
 					   BLACK);
 
-		// up to 6 digits of score
-		char message[25 + 6];
-		snprintf(message, 31, "YOU LOST! YOUR SCORE IS: %d", points);
+		char message[25 + SCORE_DIGITS];
+		snprintf(message, 25 + SCORE_DIGITS, "YOU LOST! YOUR SCORE IS: %d", points);
 		gfx_textout(SCREEN_WIDTH / 2 - strlen(message) * PIXELS_PER_LETTER, SCREEN_HEIGHT / 2 - PIXELS_PER_LETTER / 2,
 					message, WHITE);
 
