@@ -1,0 +1,211 @@
+
+==13865== Memcheck, a memory error detector
+==13865== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==13865== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==13865== Command: ./text
+==13865== 
+William Shakespeare
+
+Speech: To be, or not to be, that is the question
+
+To be, or not to be, that is the question:
+Whether ’tis nobler in the mind to suffer
+The slings and arrows of outrageous fortune,
+(...)==13865== 
+==13865== HEAP SUMMARY:
+==13865==     in use at exit: 0 bytes in 0 blocks
+==13865==   total heap usage: 219 allocs, 219 frees, 12,882 bytes allocated
+==13865== 
+==13865== All heap blocks were freed -- no leaks are possible
+==13865== 
+==13865== For lists of detected and suppressed errors, rerun with: -s
+==13865== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==13867== Memcheck, a memory error detector
+==13867== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==13867== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==13867== Command: ./text
+==13867== 
+William Shakespeare
+
+Speech: To be, or not to be, that is the question
+
+To be, or not to be, that is the question:
+Whether ’tis nobler in the mind to suffer
+The slings and arrows of outrageous fortune,
+(...)==13867== 
+==13867== HEAP SUMMARY:
+==13867==     in use at exit: 0 bytes in 0 blocks
+==13867==   total heap usage: 219 allocs, 219 frees, 12,882 bytes allocated
+==13867== 
+==13867== All heap blocks were freed -- no leaks are possible
+==13867== 
+==13867== For lists of detected and suppressed errors, rerun with: -s
+==13867== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==13869== Memcheck, a memory error detector
+==13869== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==13869== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==13869== Command: ./text
+==13869== 
+William Shakespeare
+
+Speech: To be, or not to be, that is the question
+
+To be, or not to be, that is the question:
+Whether ’tis nobler in the mind to suffer
+The slings and arrows of outrageous fortune,
+(...)==13869== 
+==13869== HEAP SUMMARY:
+==13869==     in use at exit: 0 bytes in 0 blocks
+==13869==   total heap usage: 219 allocs, 219 frees, 12,882 bytes allocated
+==13869== 
+==13869== All heap blocks were freed -- no leaks are possible
+==13869== 
+==13869== For lists of detected and suppressed errors, rerun with: -s
+==13869== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==13882== Memcheck, a memory error detector
+==13882== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==13882== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==13882== Command: ./text
+==13882== 
+William Shakespeare
+
+Speech: To be, or not to be, that is the question
+
+To be, or not to be, that is the question:
+Whether ’tis nobler in the mind to suffer
+The slings and arrows of outrageous fortune,
+(...)==13882== 
+==13882== HEAP SUMMARY:
+==13882==     in use at exit: 0 bytes in 0 blocks
+==13882==   total heap usage: 219 allocs, 219 frees, 12,882 bytes allocated
+==13882== 
+==13882== All heap blocks were freed -- no leaks are possible
+==13882== 
+==13882== For lists of detected and suppressed errors, rerun with: -s
+==13882== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==13884== Memcheck, a memory error detector
+==13884== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==13884== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==13884== Command: ./text
+==13884== 
+William Shakespeare
+
+Speech: To be, or not to be, that is the question
+
+To be, or not to be, that is the question:
+Whether ’tis nobler in the mind to suffer
+The slings and arrows of outrageous fortune,
+(...)==13884== 
+==13884== HEAP SUMMARY:
+==13884==     in use at exit: 0 bytes in 0 blocks
+==13884==   total heap usage: 219 allocs, 219 frees, 12,882 bytes allocated
+==13884== 
+==13884== All heap blocks were freed -- no leaks are possible
+==13884== 
+==13884== For lists of detected and suppressed errors, rerun with: -s
+==13884== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==13892== Memcheck, a memory error detector
+==13892== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==13892== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==13892== Command: ./text
+==13892== 
+William Shakespeare
+
+Speech: To be, or not to be, that is the question
+
+To be, or not to be, that is the question:
+Whether ’tis nobler in the mind to suffer
+The slings and arrows of outrageous fortune,
+(...)==13892== 
+==13892== HEAP SUMMARY:
+==13892==     in use at exit: 0 bytes in 0 blocks
+==13892==   total heap usage: 219 allocs, 219 frees, 12,882 bytes allocated
+==13892== 
+==13892== All heap blocks were freed -- no leaks are possible
+==13892== 
+==13892== For lists of detected and suppressed errors, rerun with: -s
+==13892== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==13894== Memcheck, a memory error detector
+==13894== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==13894== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==13894== Command: ./text
+==13894== 
+William Shakespeare
+
+Speech: To be, or not to be, that is the question
+
+To be, or not to be, that is the question:
+Whether ’tis nobler in the mind to suffer
+The slings and arrows of outrageous fortune,
+(...)==13894== 
+==13894== HEAP SUMMARY:
+==13894==     in use at exit: 0 bytes in 0 blocks
+==13894==   total heap usage: 219 allocs, 219 frees, 12,882 bytes allocated
+==13894== 
+==13894== All heap blocks were freed -- no leaks are possible
+==13894== 
+==13894== For lists of detected and suppressed errors, rerun with: -s
+==13894== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==13896== Memcheck, a memory error detector
+==13896== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==13896== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==13896== Command: ./text
+==13896== 
+William Shakespeare
+
+Speech: To be, or not to be, that is the question
+
+To be, or not to be, that is the question:
+Whether ’tis nobler in the mind to suffer
+The slings and arrows of outrageous fortune,
+(...)==13896== 
+==13896== HEAP SUMMARY:
+==13896==     in use at exit: 0 bytes in 0 blocks
+==13896==   total heap usage: 219 allocs, 219 frees, 12,882 bytes allocated
+==13896== 
+==13896== All heap blocks were freed -- no leaks are possible
+==13896== 
+==13896== For lists of detected and suppressed errors, rerun with: -s
+==13896== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==13909== Memcheck, a memory error detector
+==13909== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==13909== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==13909== Command: ./text
+==13909== 
+William Shakespeare
+
+Speech: To be, or not to be, that is the question
+
+To be, or not to be, that is the question:
+Whether ’tis nobler in the mind to suffer
+The slings and arrows of outrageous fortune,
+(...)==13909== 
+==13909== HEAP SUMMARY:
+==13909==     in use at exit: 0 bytes in 0 blocks
+==13909==   total heap usage: 219 allocs, 219 frees, 12,882 bytes allocated
+==13909== 
+==13909== All heap blocks were freed -- no leaks are possible
+==13909== 
+==13909== For lists of detected and suppressed errors, rerun with: -s
+==13909== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==13911== Memcheck, a memory error detector
+==13911== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==13911== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==13911== Command: ./text
+==13911== 
+William Shakespeare
+
+Speech: To be, or not to be, that is the question
+
+To be, or not to be, that is the question:
+Whether ’tis nobler in the mind to suffer
+The slings and arrows of outrageous fortune,
+(...)==13911== 
+==13911== HEAP SUMMARY:
+==13911==     in use at exit: 0 bytes in 0 blocks
+==13911==   total heap usage: 219 allocs, 219 frees, 12,882 bytes allocated
+==13911== 
+==13911== All heap blocks were freed -- no leaks are possible
+==13911== 
+==13911== For lists of detected and suppressed errors, rerun with: -s
+==13911== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
