@@ -8,6 +8,8 @@ typedef struct {
     char *test_value;
 } test_t;
 
+// Copyright © Stanislaw Piechota (stanislaw-piechota)
+
 int compareInt(const void *num1, const void* num2);
 int compareDouble(const void *num1, const void* num2);
 int compareChar(const void *char1, const void* char2);
