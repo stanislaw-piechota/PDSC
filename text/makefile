@@ -15,4 +15,4 @@ clean:
 
 check: text
 	make
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$< < tests/0.txt
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$< < tests/in0.txt
