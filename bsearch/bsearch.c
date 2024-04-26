@@ -37,6 +37,15 @@ void *bsearch(const void *key, const void *base, size_t num,
     int start = 0, end = num - 1, middle = (start + end) / 2 + 1;
     __intptr_t baseAddress = (__intptr_t) base;
 
+    if (start == end){
+        if (!(*compare)(key, convertIntToPtr(baseAddress, start, size))){
+            return convertIntToPtr(baseAddress, start, size);
+        }
+        else {
+            return NULL;
+        }
+    }
+
     while (end > start)
     {
         switch ((*compare)(key, convertIntToPtr(baseAddress, middle, size)))
