@@ -10,4 +10,4 @@ bank: bank.o
 bank.o: bank.c
 
 clean:
-	-rm bank bank.o
+	-rm bank.o bank
