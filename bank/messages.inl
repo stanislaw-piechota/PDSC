@@ -1,8 +1,7 @@
-const int OPERATIONS = 9;
+#include "menu.h"
 
 const char welcomeMessage[] = "\nWelcome to the banking system\nPress ENTER to continue...";
-
-char menuMessages[9][40] = {
+char menuMessages[OPERATIONS][40] = {
     "1: Create new account\n",
     "2: List all accounts\n",
     "3: Search for an account\n",
