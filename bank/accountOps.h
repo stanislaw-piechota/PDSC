@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "inputOps.h"
 
 #define _STR(x) #x
 #define STR(X) _STR(X)
@@ -14,7 +13,7 @@
 #define ADDRESS_LENGTH 101
 #define PESEL_LENGTH 12
 
-typedef struct
+typedef struct Account
 {
     int accountId;
     char name[NAME_LENGTH];

@@ -1,4 +1,6 @@
 #include "accountOps.h"
+#include "fileOps.h"
+#include "inputOps.h"
 
 int getLastAccountId()
 {
@@ -6,19 +8,10 @@ int getLastAccountId()
     Account tempAccount;
     int highestId = -1, line = 0;
 
-    if ((database = fopen("database.dat", "rb")) == NULL)
-    {
-        perror("Couldn\'t connect to the database");
-        exit(1);
-    }
-
+    connectToDatabse(&database);
     do
     {
-        if (fseek(database, (line++) * sizeof(Account), SEEK_SET))
-        {
-            perror("Error while looking for account");
-            exit(3);
-        }
+        setAccountPtr(database, (line++) * sizeof(Account));
 
         if (fread(&tempAccount, sizeof(Account), 1, database) == 1)
         {
@@ -29,28 +22,32 @@ int getLastAccountId()
 
     } while (!feof(database));
 
-    if (fclose(database))
-    {
-        perror("Error closing the database");
-        exit(2);
-    }
-
+    disconnectFromDatabase(&database);
     return highestId;
 }
 
-void createNewAccount()
+Account getAccountData()
 {
     Account newAccount = {getLastAccountId() + 1, "", "", "", "", 0.0, 0.0, 0.0};
 
     getString(newAccount.name, NAME_LENGTH, "Name", "%[a-zA-Z]s", MIN_STRING_LENGTH);
     getString(newAccount.surname, SURNAME_LENGTH, "Surname", "%[a-zA-Z-]s", MIN_STRING_LENGTH);
     getString(newAccount.address, ADDRESS_LENGTH, "Address", "%[a-zA-Z0-9,.- /]s", MIN_STRING_LENGTH);
-    getString(newAccount.pesel, PESEL_LENGTH, "Nr identyfikacyjny (PESEL)", "%[0-9]s", PESEL_LENGTH-1);
+    getString(newAccount.pesel, PESEL_LENGTH, "ID number (PESEL)", "%[0-9]s", PESEL_LENGTH-1);
     getDouble(&newAccount.balance, "What's the balance of your account");
     newAccount.loanBalance = 0;
     newAccount.interest = INTEREST_RATE;
-    
+
+    return newAccount;
+}
+
+void createNewAccount(){
+    Account newAccount = getAccountData();
     printAccountData(newAccount);
+    if (getConfirmation()){
+        saveAccountData(&newAccount);
+        printf("Account saved successfully with ID: %d\n", newAccount.accountId);
+    }
 }
 
 void printAccountData(Account account){

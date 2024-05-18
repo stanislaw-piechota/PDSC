@@ -1,7 +1,7 @@
 #include "menu.h"
 #include "messages.inl"
 
-short selectedOption = 0;
+short selectedOption = -1;
 
 void printWelcomeMessage()
 {
@@ -25,9 +25,9 @@ bool changeOption()
     int operationBuffer = -1, result;
 
     printf("Select operation to perform: ");
-    result = scanf("%d", &operationBuffer);
+    result = scanf("%1d", &operationBuffer);
     while (getchar() != '\n')
-        ;
+        return false;
 
     if (result && (operationBuffer >= 1) && (operationBuffer <= OPERATIONS))
     {
