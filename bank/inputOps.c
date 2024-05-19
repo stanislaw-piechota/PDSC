@@ -49,7 +49,8 @@ void getDouble(double *field, char *prompt)
     {
         getString(number, DOUBLE_LENGTH, prompt, "%[0-9.+-]s", 1);
         result = strtod(number, &endPtr);
-    } while ((result < 0) || (*endPtr != '\0') || (number[0] == '.') || (number[strlen(number)-1] == '.'));
+    } while ((result < 0) || (*endPtr != '\0') || (number[0] == '.') ||
+             (number[strlen(number) - 1] == '.') || (result > MAX_DOUBLE_VALUE));
     *field = result;
 }
 
@@ -59,11 +60,17 @@ bool getConfirmation()
     int result;
     do
     {
-        printf("Are you sure to perform this action (Y/N): ");
+        printf("\nAre you sure to perform this action (Y/N): ");
         result = scanf("%1[YN]c", &answer);
-        while (getchar() != '\n')
-            ;
+        waitForEnter();
     } while (!result);
 
     return (answer == 'Y' ? true : false);
+}
+
+void waitForEnter()
+{
+    printf("\nPress ENTER to continue...");
+    while (getchar() != '\n')
+        ;
 }

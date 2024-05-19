@@ -9,13 +9,15 @@
 #define INTEREST_RATE 0.05
 #define MIN_STRING_LENGTH 2
 #define NAME_LENGTH 21
-#define SURNAME_LENGTH 51
-#define ADDRESS_LENGTH 101
+#define SURNAME_LENGTH 31
+#define ADDRESS_LENGTH 61
 #define PESEL_LENGTH 12
+
+#define SHORT_FIELD 20
 
 typedef struct Account
 {
-    int accountId;
+    long accountId;
     char name[NAME_LENGTH];
     char surname[SURNAME_LENGTH];
     char address[ADDRESS_LENGTH];
@@ -27,6 +29,8 @@ typedef struct Account
 
 void printAccountData(Account account);
 void createNewAccount(void);
-int getLastAccountId();
+long getLastAccountId(void);
+void printAccounts(void);
+void printAccountHeader(void);
 
 #endif

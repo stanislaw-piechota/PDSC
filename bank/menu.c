@@ -5,15 +5,15 @@ short selectedOption = -1;
 
 void printWelcomeMessage()
 {
-    // system("clear");
+    system("clear");
     printf(welcomeMessage);
     while (getchar() != '\n')
         ;
+    system("clear");
 }
 
 void printMenu()
 {
-    // system("clear");
     printf("\n");
     for (int i = 0; i < OPERATIONS; i++)
         printf("%s", menuMessages[i]);
