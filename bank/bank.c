@@ -1,6 +1,33 @@
 #include "accountOps.h"
 #include "menu.h"
 #include "inputOps.h"
+#include "fileOps.h"
+
+void searchOperation(){
+    Account searchResult;
+    printFindMenu();
+    system("clear");
+    switch (selectedSearchOption) {
+        case 0:
+            searchByID();
+            break;
+        case 1:
+            searchByString(NAME_LENGTH, &searchResult, searchResult.name, "%[a-zA-Z]s");
+            break;
+        case 2:
+            searchByString(SURNAME_LENGTH, &searchResult, searchResult.surname, "%[a-zA-Z-]s");
+            break;
+        case 3:
+            searchByString(ADDRESS_LENGTH, &searchResult, searchResult.address, "%[a-zA-Z0-9,.- /]s");
+            break;
+        case 4:
+            searchByString(PESEL_LENGTH, &searchResult, searchResult.pesel, "%[0-9]s");
+            break;
+        default:
+            printf("No option selected. Continuing...\n");
+            break;
+    }
+}
 
 void executeOperation()
 {
@@ -11,6 +38,9 @@ void executeOperation()
         break;
     case 1:
         printAccounts();
+        break;
+    case 2:
+        searchOperation();
         break;
     case 8:
         exit(0);
@@ -24,10 +54,9 @@ int main(int argc, char const *argv[])
 
     while (true)
     {
-        system("clear");
-        printMenu();
+        printMenu(OPERATIONS, menuMessages);
 
-        if (!changeOption())
+        if (!changeOption(OPERATIONS, &selectedOption))
         {
             printf("Couldnt execute any operation\n");
             continue;
@@ -36,9 +65,6 @@ int main(int argc, char const *argv[])
         system("clear");
         executeOperation();
         waitForEnter();
-
-        // printAccounts();
-        // while (getchar() != '\n');
     }
 
     return 0;

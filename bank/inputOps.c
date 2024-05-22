@@ -54,6 +54,17 @@ void getDouble(double *field, char *prompt)
     *field = result;
 }
 
+void getLong(long *field, char *prompt){
+    char number[DOUBLE_LENGTH], *endPtr;
+    long result;
+    do
+    {
+        getString(number, DOUBLE_LENGTH, prompt, "%[0-9]s", 1);
+        result = strtol(number, &endPtr, 10);
+    } while (*endPtr != '\0');
+    *field = result;
+}
+
 bool getConfirmation()
 {
     char answer;

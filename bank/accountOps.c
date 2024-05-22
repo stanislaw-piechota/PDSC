@@ -88,3 +88,43 @@ void printAccounts()
 
     disconnectFromDatabase(&database);
 }
+
+void searchByID(){
+    FILE *database;
+    long searchID;
+    Account searchResult;
+
+    getLong(&searchID, "ID to search for");
+    connectToDatabse(&database);
+    if (readAccount(database, &searchResult, searchID))
+    {
+        printAccountHeader();
+        printAccountData(searchResult);
+    }
+    else
+        printf("Account with ID: %ld not found\n", searchID);
+    disconnectFromDatabase(&database);
+}
+
+void searchByString(int resultLength, Account *searchResult, char compareField[], char format[]){
+    FILE *database;
+    char searchField[resultLength];
+    long id=0, results = 0;
+
+    getString(searchField, resultLength, "Value to search for", format, 1);
+    connectToDatabse(&database);
+    do{
+        if (readAccount(database, searchResult, id++) && !strcmp(compareField, searchField))
+        {
+            if (!results){
+                system("clear");
+                printAccountHeader();
+            }
+            printAccountData(*searchResult);
+            results++;
+        }
+    } while (!feof(database));
+    if (!results)
+        printf("Account with value %s not found\n", searchField);
+    disconnectFromDatabase(&database);
+}

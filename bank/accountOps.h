@@ -32,5 +32,7 @@ void createNewAccount(void);
 long getLastAccountId(void);
 void printAccounts(void);
 void printAccountHeader(void);
+void searchByID(void);
+void searchByString(int resultLength, Account *searchResult, char compareField[], char format[]);
 
 #endif

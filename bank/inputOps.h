@@ -14,6 +14,7 @@
 
 void getString(char stringPtr[], int length, char *prompt, char *format, int minLength);
 void getDouble(double *field, char *prompt);
+void getLong(long *field, char* prompt);
 bool getConfirmation(void);
 void waitForEnter(void);
 

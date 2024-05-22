@@ -1,10 +1,10 @@
 all: bank
 
 bank: bank.o accountOps.o menu.o inputOps.o fileOps.o
-	gcc -g bank.o accountOps.o menu.o inputOps.o fileOps.o -o $@  -lm
+	gcc -g -fsanitize=undefined bank.o accountOps.o menu.o inputOps.o fileOps.o -o $@  -lm
 
 .c.o: 
-	gcc -g -Wall -pedantic -c  $<
+	gcc -g -fsanitize=undefined -Wall -pedantic -c  $<
 
 bank.o: bank.c
 accountOps.o: accountOps.c
