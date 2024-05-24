@@ -11,6 +11,8 @@ void printWelcomeMessage(void);
 void printMenu(short length, char messages[][40]);
 bool changeOption(short length, short *optionVar);
 void printFindMenu(void);
+void printAccountData(void *accountData);
+void printAccountHeader(void);
 
 extern short selectedOption;
 extern short selectedSearchOption;

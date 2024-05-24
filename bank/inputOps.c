@@ -73,7 +73,7 @@ bool getConfirmation()
     {
         printf("\nAre you sure to perform this action (Y/N): ");
         result = scanf("%1[YN]c", &answer);
-        waitForEnter();
+        while (getchar() != '\n');
     } while (!result);
 
     return (answer == 'Y' ? true : false);

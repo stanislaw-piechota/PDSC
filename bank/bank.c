@@ -3,13 +3,25 @@
 #include "inputOps.h"
 #include "fileOps.h"
 
+void makeDeposit(){
+    makeDepositWithdraw(true);
+}
+
+void makeWithdraw(){
+    makeDepositWithdraw(false);
+}
+
+void stopSystem(){
+    exit(0);
+}
+
 void searchOperation(){
     Account searchResult;
     printFindMenu();
     system("clear");
     switch (selectedSearchOption) {
         case 0:
-            searchByID();
+            getAccount(&searchResult, "search for");
             break;
         case 1:
             searchByString(NAME_LENGTH, &searchResult, searchResult.name, "%[a-zA-Z]s");
@@ -31,21 +43,17 @@ void searchOperation(){
 
 void executeOperation()
 {
-    switch (selectedOption)
-    {
-    case 0:
-        createNewAccount();
-        break;
-    case 1:
-        printAccounts();
-        break;
-    case 2:
-        searchOperation();
-        break;
-    case 8:
-        exit(0);
-        break;
-    }
+    void (*functions[OPERATIONS])(void);
+    functions[0] = createNewAccount;
+    functions[1] = printAccounts;
+    functions[2] = searchOperation;
+    functions[3] = makeDeposit;
+    functions[4] = makeWithdraw;
+    functions[5] = makeTransfer;
+    functions[6] = takeLoan;
+    functions[7] = payDebt;
+    functions[8] = stopSystem;
+    functions[selectedOption]();
 }
 
 int main(int argc, char const *argv[])

@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include "menu.h"
 
 #define _STR(x) #x
 #define STR(X) _STR(X)
@@ -27,12 +29,16 @@ typedef struct Account
     double interest;
 } Account;
 
-void printAccountData(Account account);
 void createNewAccount(void);
 long getLastAccountId(void);
+void makeDepositWithdraw(bool deposit);
+void makeTransfer(void);
+void takeLoan(void);
+void payDebt(void);
 void printAccounts(void);
-void printAccountHeader(void);
-void searchByID(void);
+bool getAccount(Account* account, const char prompt[]);
+void changeBalance(Account *deposit, double *balance, double newBalance);
 void searchByString(int resultLength, Account *searchResult, char compareField[], char format[]);
+bool accountExists(Account *searchResult, long accountID);
 
 #endif
